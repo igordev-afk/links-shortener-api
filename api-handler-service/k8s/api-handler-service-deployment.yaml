@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: api-handler-service
+spec:
+  template:
+    metadata:
+      labels:
+        app: api-handler-service
+    spec:
+      containers:
+        - name: api-handler-service
+          image: wwerloshh/my-own-repo:api-handler-service-v1.0.0
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8082
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "k8s"
+          envFrom:
+            - configMapRef:
+                name: shared-config
+  selector:
+    matchLabels:
+      app: api-handler-service

@@ -1,0 +1,18 @@
+spring:
+  datasource:
+    hikari:
+      idle-timeout: 10000
+      connection-timeout: 1000
+      minimum-idle: 2
+      maximum-pool-size: 2
+      pool-name: ${spring.application.name}
+    url: ${DB_URL}
+    username: ${DB_USER}
+    password: ${DB_PASSWORD}
+
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+server:
+  port: 8082
