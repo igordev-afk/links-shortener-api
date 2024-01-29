@@ -1,0 +1,11 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: shared-config
+data:
+  DB_URL: "jdbc:postgresql://postgres:5432/shortened_urls"
+  DB_USER: "postgres"
+  DB_PASSWORD: "1"
+
+  redis.conf: |-
+    timeout 3600
