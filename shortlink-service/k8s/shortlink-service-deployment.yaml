@@ -1,0 +1,25 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: shortlink-service
+spec:
+  template:
+    metadata:
+      labels:
+        app: shortlink-service
+    spec:
+      containers:
+        - name: shortlink-service
+          image: wwerloshh/my-own-repo:shortlink-service
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "k8s"
+          envFrom:
+            - configMapRef:
+                name: shared-config
+  selector:
+    matchLabels:
+      app: shortlink-service
