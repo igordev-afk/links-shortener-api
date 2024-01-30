@@ -11,8 +11,9 @@
     <modules>
         <module>api-handler-service</module>
         <module>shortlink-service</module>
-        <module>authentification-service</module>
+        <module>authentication-service</module>
         <module>data-cleaner-service</module>
+        <module>gateway-service</module>
     </modules>
 
     <properties>
