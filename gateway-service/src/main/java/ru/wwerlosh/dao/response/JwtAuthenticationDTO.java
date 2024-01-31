@@ -2,13 +2,13 @@ package ru.wwerlosh.dao.response;
 
 import java.io.Serializable;
 
-public class JwtAuthenticationResponse {
+public class JwtAuthenticationDTO {
     private String token;
 
-    public JwtAuthenticationResponse() {
+    public JwtAuthenticationDTO() {
     }
 
-    public JwtAuthenticationResponse(String token) {
+    public JwtAuthenticationDTO(String token) {
         this.token = token;
     }
 
