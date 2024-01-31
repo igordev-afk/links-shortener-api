@@ -67,13 +67,12 @@ public class ApiService {
         return new UrlResponse(longUrl, shortUrl);
     }
 
-    public RedirectView redirect(String token) {
+    public String redirect(String token) {
         Optional<Url> urlOptional = urlRepository.findUrlByShortUrl(token);
 
         if (urlOptional.isPresent()) {
             Url url = urlOptional.get();
-            String longUrl = url.getLongUrl();
-            return new RedirectView(longUrl);
+            return url.getLongUrl();
         } else {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Page not found");
         }

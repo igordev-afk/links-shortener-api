@@ -22,12 +22,11 @@ public class ApiController {
 
     @PostMapping("api/v1/data/shorten")
     public Response shortenLink(@RequestBody UrlRequest longUrl) {
-        logger.info("New request");
         return apiService.shortenLink(longUrl);
     }
 
-    @GetMapping("{token}")
-    public RedirectView redirect(@PathVariable("token") String token) {
+    @GetMapping("api/v1/data/{token}")
+    public String redirect(@PathVariable("token") String token) {
         return apiService.redirect(token);
     }
 }
