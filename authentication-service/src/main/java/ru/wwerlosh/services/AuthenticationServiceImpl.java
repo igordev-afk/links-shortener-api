@@ -50,13 +50,10 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JwtAuthenticationResponse signIn(SignInRequest request) {
-        log.info("step 1");
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        log.info("step 2");
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
-        log.info("User is taken from db");
         String jwtToken = jwtService.generateToken(user);
         return new JwtAuthenticationResponse(jwtToken);
     }
