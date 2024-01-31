@@ -39,7 +39,6 @@ public class HttpClient {
 
     public String generateShortLink(UrlRequest urlRequest) throws IOException {
         String shortenUrlEndpoint = shortlinkServiceUrl + "/api/shorten";
-
         HttpPost request = new HttpPost(shortenUrlEndpoint);
         request.setHeader("Content-Type", "application/json");
 
