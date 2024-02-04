@@ -10,7 +10,7 @@ spec:
     spec:
       containers:
         - name: api-handler-service
-          image: wwerloshh/my-own-repo:api-handler-service-v1.0.0
+          image: wwerloshh/my-own-repo:api-handler-service-v1.0.1
           imagePullPolicy: Always
           ports:
             - containerPort: 8082
