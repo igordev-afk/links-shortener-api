@@ -1,9 +1,3 @@
-server:
-  port: 8080
-
 spring:
   application:
     name: api-gateway
-  data:
-    jwt:
-      secret: "8w9U7eupsVcokibCDUjO59xuTkl9XJvtMJnx0O7ysqmlmYROYHm88YASpGOsPKFP"
