@@ -12,6 +12,7 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.util.EntityUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import ru.wwerlosh.controllers.dto.Response;
 import ru.wwerlosh.controllers.dto.UrlRequest;
@@ -27,12 +28,18 @@ public class HttpClient {
     private final DtoMapper mapper;
     private final static CloseableHttpClient httpClient = HttpClients.createDefault();
 
+    @Value("${spring.data.api-handler-service}")
+    private String API_HANDLER_SERVICE_URL;
+
+    @Value("${spring.data.auth-service}")
+    private String AUTH_SERVICE_URL;
+
     public HttpClient(DtoMapper mapper) {
         this.mapper = mapper;
     }
 
     public JwtAuthenticationDTO signUpClient(SignUpRequest signUpRequest) {
-        final String serviceEndpoint = "http://localhost:8083/api/v1/auth/signup";
+        final String serviceEndpoint = AUTH_SERVICE_URL + "/api/v1/auth/signup";
 
         HttpPost request = new HttpPost(serviceEndpoint);
         request.setHeader("Content-Type", "application/json");
@@ -56,7 +63,7 @@ public class HttpClient {
     }
 
     public JwtAuthenticationDTO signInClient(SignInRequest signInRequest) {
-        final String serviceEndpoint = "http://localhost:8083/api/v1/auth/signin";
+        final String serviceEndpoint = AUTH_SERVICE_URL + "/api/v1/auth/signin";
 
         HttpPost request = new HttpPost(serviceEndpoint);
         request.setHeader("Content-Type", "application/json");
@@ -85,7 +92,7 @@ public class HttpClient {
     }
 
     public Response shortenUrlClient(UrlRequest urlRequest) {
-        final String serviceEndpoint = "http://localhost:8082/api/v1/data/shorten";
+        final String serviceEndpoint = API_HANDLER_SERVICE_URL + "/api/v1/data/shorten";
 
         HttpPost request = new HttpPost(serviceEndpoint);
         request.setHeader("Content-Type", "application/json");
@@ -109,8 +116,8 @@ public class HttpClient {
     }
 
     public String redirectClient(String token) {
-        final String serviceEndpoint = "http://localhost:8082/api/v1/data/" + token;
-
+        final String serviceEndpoint = API_HANDLER_SERVICE_URL + "/api/v1/data/" + token;
+        System.out.println(serviceEndpoint);
         HttpGet request = new HttpGet(serviceEndpoint);
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
