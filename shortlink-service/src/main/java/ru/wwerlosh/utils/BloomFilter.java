@@ -11,7 +11,6 @@ import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.BitSet;
 
-//TODO: redo methods of data serialization/uploading -> downloading
 @Component
 public class BloomFilter {
 
