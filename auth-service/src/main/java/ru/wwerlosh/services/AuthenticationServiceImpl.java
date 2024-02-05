@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 import ru.wwerlosh.dao.request.SignInRequest;
 import ru.wwerlosh.dao.request.SignUpRequest;
 import ru.wwerlosh.dao.response.JwtAuthenticationResponse;
+import ru.wwerlosh.exceptions.SignUpException;
 import ru.wwerlosh.user.Role;
 import ru.wwerlosh.user.User;
 import ru.wwerlosh.user.UserRepository;
@@ -17,7 +18,7 @@ import ru.wwerlosh.user.UserRepository;
 @Service
 public class AuthenticationServiceImpl implements AuthenticationService {
 
-    private static final Logger log = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(AuthenticationServiceImpl.class);
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
@@ -36,6 +37,11 @@ public class AuthenticationServiceImpl implements AuthenticationService {
 
     @Override
     public JwtAuthenticationResponse signUp(SignUpRequest request) {
+
+        if (userRepository.existsByEmail(request.getEmail())) {
+            throw new SignUpException("Email is busy");
+        }
+
         User user = new User(
                 request.getFirstName(),
                 request.getLastName(),
