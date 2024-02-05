@@ -11,7 +11,7 @@ import java.io.Serializable;
 
 @Entity
 @Table(name = "urls_table")
-public class Url implements Serializable {
+public class UrlMapping implements Serializable {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "url_id", nullable = false)
@@ -23,10 +23,10 @@ public class Url implements Serializable {
     @Column(name = "short_url", nullable = false)
     private String shortUrl;
 
-    public Url() {
+    public UrlMapping() {
     }
 
-    public Url(String longUrl, String shortUrl) {
+    public UrlMapping(String longUrl, String shortUrl) {
         this.longUrl = longUrl;
         this.shortUrl = shortUrl;
     }

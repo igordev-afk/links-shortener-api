@@ -1,8 +1,8 @@
 package ru.wwerlosh.repositories.redis;
 
-import ru.wwerlosh.entities.Url;
+import ru.wwerlosh.entities.UrlMapping;
 
 public interface RedisRepository {
-    Url findByLongUrl(String longUrl);
-    void save(Url url);
+    UrlMapping findByLongUrl(String longUrl);
+    void save(UrlMapping url);
 }

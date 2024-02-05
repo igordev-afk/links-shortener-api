@@ -32,8 +32,19 @@ public class HttpClient {
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             int statusCode = response.getStatusLine().getStatusCode();
 
-            logger.info("HTTP Status Code: {}", response.getStatusLine().getStatusCode());
-            return statusCode >= 200 && statusCode < 300;
+            logger.info("Trying to connect to '{}'", url);
+            logger.info("HTTP Status Code: {}", statusCode);
+
+            if (statusCode >= 200 && statusCode < 300) {
+                logger.info("Connection successful");
+                return true;
+            } else {
+                logger.warn("Connection unsuccessful");
+                return false;
+            }
+        } catch (IOException e) {
+            logger.error("Error connecting to '{}': {}", url, e.getMessage());
+            throw new RuntimeException(e);
         }
     }
 
@@ -46,9 +57,21 @@ public class HttpClient {
         request.setEntity(entity);
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
-            logger.info("HTTP Status Code: {}", response.getStatusLine().getStatusCode());
-            return EntityUtils.toString(response.getEntity());
+            int statusCode = response.getStatusLine().getStatusCode();
+
+            logger.info("Generating short link for '{}'", urlRequest.getLongUrl());
+            logger.info("HTTP Status Code: {}", statusCode);
+
+            if (statusCode >= 200 && statusCode < 300) {
+                String shortLink = EntityUtils.toString(response.getEntity());
+                logger.info("Short link generated successfully: '{}'", shortLink);
+                return shortLink;
+            } else {
+                logger.error("Failed to generate short link");
+                throw new RuntimeException();
+            }
         } catch (IOException e) {
+            logger.error("Error generating short link for '{}': {}", urlRequest.getLongUrl(), e.getMessage());
             throw new RuntimeException(e);
         }
 
@@ -56,6 +79,7 @@ public class HttpClient {
 
     @PreDestroy
     void destroy() throws IOException {
+        logger.info("Closing HTTP client");
         httpClient.close();
     }
 }

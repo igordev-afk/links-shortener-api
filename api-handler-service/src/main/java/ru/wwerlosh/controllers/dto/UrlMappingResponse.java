@@ -1,21 +1,21 @@
 package ru.wwerlosh.controllers.dto;
 
-import ru.wwerlosh.entities.Url;
+import ru.wwerlosh.entities.UrlMapping;
 
-public class UrlResponse implements Response {
+public class UrlMappingResponse implements Response {
 
     private String longUrl;
     private String shortUrl;
 
-    public UrlResponse() {
+    public UrlMappingResponse() {
     }
 
-    public UrlResponse(String longUrl, String shortUrl) {
+    public UrlMappingResponse(String longUrl, String shortUrl) {
         this.longUrl = longUrl;
         this.shortUrl = shortUrl;
     }
 
-    public UrlResponse(Url url) {
+    public UrlMappingResponse(UrlMapping url) {
         this.longUrl = url.getLongUrl();
         this.shortUrl = url.getShortUrl();
     }
