@@ -2,6 +2,7 @@ package ru.wwerlosh.services;
 
 import jakarta.servlet.http.HttpServletRequest;
 import org.apache.http.HttpStatus;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
 import ru.wwerlosh.configs.HttpClient;
@@ -19,10 +20,12 @@ public class GatewayService {
 
     private final HttpClient httpClient;
     private final JwtUtils jwtUtils;
-
-    public GatewayService(HttpClient httpClient, JwtUtils jwtUtils) {
+    private final String HOST;
+    public GatewayService(HttpClient httpClient, JwtUtils jwtUtils,
+                          @Value("${server.uri}") String HOST) {
         this.httpClient = httpClient;
         this.jwtUtils = jwtUtils;
+        this.HOST = HOST;
     }
 
 
@@ -52,7 +55,10 @@ public class GatewayService {
             );
         }
 
-        return httpClient.shortenUrlClient(request);
+        UrlResponse response = (UrlResponse) httpClient.shortenUrlClient(request);
+        String shortUrl = HOST + response.getShortUrl();
+        response.setShortUrl(shortUrl);
+        return response;
     }
 
     public RedirectView redirect(String token) {
