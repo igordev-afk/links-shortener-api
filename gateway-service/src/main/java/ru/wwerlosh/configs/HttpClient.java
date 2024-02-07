@@ -117,7 +117,6 @@ public class HttpClient {
 
     public String redirectClient(String token) {
         final String serviceEndpoint = API_HANDLER_SERVICE_URL + "/api/v1/data/" + token;
-        System.out.println(serviceEndpoint);
         HttpGet request = new HttpGet(serviceEndpoint);
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
