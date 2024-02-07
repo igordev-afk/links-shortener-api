@@ -11,6 +11,7 @@ target/
 *.iws
 *.iml
 *.ipr
+/shortlink-service/src/main/java/ru/wwerlosh/data/bit_set.json
 
 ### Eclipse ###
 .apt_generated
@@ -36,3 +37,4 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
