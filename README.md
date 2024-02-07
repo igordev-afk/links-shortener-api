@@ -31,7 +31,7 @@ To register and obtain your authentication token, send a POST request to `/signu
 ```
 
 ### Shortening URL
-Send a POST request to /shorten_url with the following JSON payload:
+Send a POST request to /shorten_url with the following JSON payload and request header with valid Bearer token:
 
 ```json
 {
@@ -49,10 +49,34 @@ To refresh your authentication token, send a POST request to /signin with your e
 }
 ```
 
-## Deployment in Kubernetes
-The Links Shortener API is fully compatible with Kubernetes deployment. 
-Configuration files for each service are provided in their respective Kubernetes directories. Additionally, 
-a common kubernetes_intro directory contains configurations for Redis, PostgreSQL, and ConfigMap.
+## Deployment in Minikube
+
+To deploy the Links Shortener API in Minikube, follow these steps:
+
+1. **Start Minikube**: Ensure Minikube is installed and running. If not, you can install it following the [Minikube documentation](https://minikube.sigs.k8s.io/docs/start/).
+
+2. **Apply Kubernetes Configurations**: Navigate to the Kubernetes directory of the project and apply the configurations using the following command for each YAML file:
+   
+```bash
+kubectl apply -f <filename>
+```
+
+This command will apply the configurations necessary for deploying the API to your Minikube cluster.
+
+3. **Access API**: Once deployed, you can access the API through the exposed service. Use the Minikube IP and the assigned port to access the API endpoints.
+
+To find the IP address of your Minikube cluster, you can use the following command:
+
+```bash
+minikube ip
+```
+
+Then, you can access the API using the obtained IP address and the assigned port.
+
+Replace `<minikube-ip>` with your Minikube IP address and `<assigned-port>` with the port assigned to the 'gateway-service'.
+'http://<minikube-ip>:<assigned-port>/shorten_url'
+
+This will allow you to deploy and access the Links Shortener API within your Minikube environment.
 
 ## Security
 Ensure the security of your JWT token to prevent unauthorized access to your account and data. 
