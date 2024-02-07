@@ -2,8 +2,8 @@ package ru.wwerlosh.services;
 
 import org.springframework.stereotype.Service;
 import ru.wwerlosh.controllers.dto.UrlRequest;
-import ru.wwerlosh.entities.Url;
-import ru.wwerlosh.repositories.UrlRepository;
+import ru.wwerlosh.entities.UrlMapping;
+import ru.wwerlosh.repositories.UrlMappingRepository;
 import ru.wwerlosh.utils.BloomFilter;
 
 import java.security.MessageDigest;
@@ -13,10 +13,10 @@ import java.util.Base64;
 @Service
 public class ShortLinkServiceImpl implements ShortLinkService {
 
-    private final UrlRepository repository;
+    private final UrlMappingRepository repository;
     private final BloomFilter bloomFilter;
 
-    public ShortLinkServiceImpl(UrlRepository repository, BloomFilter bloomFilter) {
+    public ShortLinkServiceImpl(UrlMappingRepository repository, BloomFilter bloomFilter) {
         this.repository = repository;
         this.bloomFilter = bloomFilter;
     }
@@ -30,9 +30,8 @@ public class ShortLinkServiceImpl implements ShortLinkService {
             encodedHash = generateShortUrl(encodedHash + longUrl.getLongUrl());
         }
 
-        System.out.println(encodedHash);
         bloomFilter.add(encodedHash);
-        repository.save(new Url(longUrl.getLongUrl(), encodedHash));
+        repository.save(new UrlMapping(longUrl.getLongUrl(), encodedHash));
         return encodedHash;
     }
 
