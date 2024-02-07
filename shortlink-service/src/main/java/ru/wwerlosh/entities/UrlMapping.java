@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 
 @Entity
 @Table(name = "urls_table")
-public class Url {
+public class UrlMapping {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "url_id", nullable = false)
@@ -16,10 +16,10 @@ public class Url {
     @Column(name = "short_url", nullable = false)
     private String shortUrl;
 
-    public Url() {
+    public UrlMapping() {
     }
 
-    public Url(String longUrl, String shortUrl) {
+    public UrlMapping(String longUrl, String shortUrl) {
         this.longUrl = longUrl;
         this.shortUrl = shortUrl;
     }
