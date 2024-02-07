@@ -7,5 +7,10 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+  data:
+    bloom-filter:
+      size: 100000
+      num-hash-functions: 4
+      bitset-json-path: "C:\\Users\\igors\\pets\\links_shortener_api\\shortlink-service\\src\\main\\java\\ru\\wwerlosh\\data\\bit_set.json"
 server:
   port: 8081

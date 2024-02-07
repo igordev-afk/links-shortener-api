@@ -14,3 +14,9 @@ spring:
     hibernate:
       ddl-auto: update
     show-sql: true
+
+  data:
+    bloom-filter:
+      size: 100000
+      num-hash-functions: 4
+      bitset-json-path: "data\bit_set.json"
