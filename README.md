@@ -8,6 +8,8 @@ The Links Shortener API offers a simple yet effective solution for shortening UR
 
 ## How It Works
 
+![image](https://github.com/igordev-afk/links-shortener-api/assets/66678952/1c5f2f12-faae-483a-9832-1a123d6a255b)
+
 1. **Sign Up**: Register to obtain authentication credentials. Upon successful registration, you will receive a JWT token, which will be used for subsequent API requests. Tokens are valid for one hour.
 
 2. **Shorten URL**: Send a POST request to `/shorten_url` with the original URL (`"longUrl"`) in the request body. This endpoint will return a shortened URL (`"shortUrl"`).
