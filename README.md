@@ -73,8 +73,10 @@ minikube ip
 
 Then, you can access the API using the obtained IP address and the assigned port.
 
-Replace `<minikube-ip>` with your Minikube IP address and `<assigned-port>` with the port assigned to the 'gateway-service'.
-'http://<minikube-ip:assigned-port>/shorten_url'
+Replace `<minikube-ip>` with your Minikube IP address and `<assigned-port>` with the port assigned to the 'gateway-service':
+```
+http://minikube-ip:assigned-port/shorten_url
+```
 
 This will allow you to deploy and access the Links Shortener API within your Minikube environment.
 
