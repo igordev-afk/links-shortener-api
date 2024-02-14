@@ -57,9 +57,6 @@ spec:
           volumeMounts:
             - name: redis
               mountPath: /data
-          command:
-            - "redis-server"
-            - "/etc/redis/redis.conf"
       volumes:
         - name: redis
           persistentVolumeClaim:
