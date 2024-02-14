@@ -47,10 +47,10 @@ public class GatewayService {
             );
         }
 
-        final String jwtToken = authHeader.substring(7);
-        if (jwtUtils.isTokenExpired(jwtToken)) {
+        final String jwt = authHeader.substring(7);
+        if (!httpClient.validateTokenClient(jwt)) {
             return new AuthorizationErrorResponse(
-                    "Token has been expired",
+                    "Token is invalid or has been expired",
                     HttpStatus.SC_UNAUTHORIZED
             );
         }
