@@ -65,6 +65,11 @@ kubectl apply -f <filename>
 
 This command will apply the configurations necessary for deploying the API to your Minikube cluster.
 
+To quickly deploy this service, you can use 'deploy.sh':
+```bash
+bash deploy.sh
+```
+
 3. **Access API**: Once deployed, you can access the API through the exposed service. Use the Minikube IP and the assigned port to access the API endpoints.
 
 To find the IP address of your Minikube cluster, you can use the following command:
