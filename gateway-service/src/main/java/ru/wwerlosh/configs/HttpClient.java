@@ -86,6 +86,20 @@ public class HttpClient {
         }
     }
 
+    public boolean validateTokenClient(String jwt) {
+        final String serviceEndpoint = AUTH_SERVICE_URL + "/api/v1/auth/validate-token";
+
+        HttpGet request = new HttpGet(serviceEndpoint);
+        request.addHeader("Authorization", "Bearer " + jwt);
+
+        try (CloseableHttpResponse response = httpClient.execute(request)) {
+            int statusCode = response.getStatusLine().getStatusCode();
+            return statusCode == 200;
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+    }
+
     @PreDestroy
     void destroy() throws IOException {
         httpClient.close();
