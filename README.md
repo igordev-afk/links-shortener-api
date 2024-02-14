@@ -65,7 +65,7 @@ kubectl apply -f <filename>
 
 This command will apply the configurations necessary for deploying the API to your Minikube cluster.
 
-To quickly deploy this service, you can use 'deploy.sh':
+**To quickly deploy this service, you can use `deploy.sh`:**
 ```bash
 bash deploy.sh
 ```
