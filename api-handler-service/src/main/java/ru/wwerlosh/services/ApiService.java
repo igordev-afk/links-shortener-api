@@ -11,8 +11,8 @@ import ru.wwerlosh.controllers.dto.Response;
 import ru.wwerlosh.controllers.dto.UrlMappingResponse;
 import ru.wwerlosh.controllers.dto.UrlRequest;
 import ru.wwerlosh.entities.UrlMapping;
-import ru.wwerlosh.repositories.redis.RedisRepository;
 import ru.wwerlosh.repositories.jpa.UrlRepository;
+import ru.wwerlosh.repositories.redis.RedisRepository;
 
 import java.io.IOException;
 import java.util.Optional;
@@ -37,16 +37,11 @@ public class ApiService {
     public Response shortenLink(UrlRequest urlRequest) {
         String longUrl = urlRequest.getLongUrl();
 
-        UrlMapping cache = getFromCache(longUrl);
-        if (cache != null) {
-            return new UrlMappingResponse(cache);
-        }
-
-        if (!tryConnectToUrl(longUrl)) {
+        if (!checkConnection(longUrl)) {
             return new ErrorResponse("Failed to establish connection to the URL");
         }
 
-        UrlMapping databaseUrl = getFromDatabase(longUrl);
+        UrlMapping databaseUrl = getUrlMappingFromDatabase(longUrl);
         if (databaseUrl != null) {
             return new UrlMappingResponse(databaseUrl);
         }
@@ -56,10 +51,15 @@ public class ApiService {
     }
 
     public String redirect(String token) {
-        Optional<UrlMapping> urlOptional = urlRepository.findUrlMappingByShortUrl(token);
+        String longUrl = redisRepository.findLongUrlByToken(token);
+        if (longUrl != null) {
+            return longUrl;
+        }
 
+        Optional<UrlMapping> urlOptional = urlRepository.findUrlMappingByShortUrl(token);
         if (urlOptional.isPresent()) {
             UrlMapping url = urlOptional.get();
+            redisRepository.save(url.getShortUrl(), url.getLongUrl());
             logger.info("Redirecting to long URL: '{}'", url.getLongUrl());
             return url.getLongUrl();
         } else {
@@ -68,17 +68,9 @@ public class ApiService {
         }
     }
 
-    private UrlMapping getFromCache(String longUrl) {
-        UrlMapping cache = redisRepository.findByLongUrl(longUrl);
-        if (cache != null) {
-            logger.info("Shortened link found in cache for '{}'", longUrl);
-        }
-        return cache;
-    }
-
-    private boolean tryConnectToUrl(String longUrl) {
+    private boolean checkConnection(String longUrl) {
         try {
-            if (!httpClient.tryConnect(longUrl)) {
+            if (!httpClient.checkHttpOk(longUrl)) {
                 logger.warn("Failed to establish connection to the URL: '{}'", longUrl);
                 return false;
             }
@@ -89,11 +81,10 @@ public class ApiService {
         return true;
     }
 
-    private UrlMapping getFromDatabase(String longUrl) {
+    private UrlMapping getUrlMappingFromDatabase(String longUrl) {
         Optional<UrlMapping> urlOptional = urlRepository.findUrlMappingByLongUrl(longUrl);
         if (urlOptional.isPresent()) {
             UrlMapping url = urlOptional.get();
-            redisRepository.save(url);
             logger.info("Shortened link retrieved from database for '{}'", longUrl);
             return url;
         }
@@ -109,7 +100,6 @@ public class ApiService {
             logger.error("IOException occurred while trying to generate short link for '{}'", longUrl, e);
             throw new RuntimeException(e);
         }
-        redisRepository.save(new UrlMapping(longUrl, shortUrl));
         logger.info("Generated and saved short link for '{}'", longUrl);
         return shortUrl;
     }
