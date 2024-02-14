@@ -1,6 +1,10 @@
 package ru.wwerlosh.controllers;
 
+import jakarta.servlet.http.HttpServletRequest;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -20,12 +24,22 @@ public class AuthenticationController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<JwtAuthenticationResponse> signup(@RequestBody SignUpRequest request) {
-        return ResponseEntity.ok(authenticationService.signUp(request));
+    public JwtAuthenticationResponse signup(@RequestBody SignUpRequest request) {
+        return authenticationService.signUp(request);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtAuthenticationResponse> signin(@RequestBody SignInRequest request) {
-        return ResponseEntity.ok(authenticationService.signIn(request));
+    public JwtAuthenticationResponse signin(@RequestBody SignInRequest request) {
+        return authenticationService.signIn(request);
+    }
+
+    @GetMapping("/validate-token")
+    public ResponseEntity<String> validateToken(HttpServletRequest servletRequest) {
+        final String authHeader = servletRequest.getHeader("Authorization");
+        if (authenticationService.isTokenValid(authHeader.substring(7))) {
+            return ResponseEntity.ok("Token is valid");
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Token is invalid");
+        }
     }
 }
