@@ -62,7 +62,17 @@ public class AuthenticationServiceImpl implements AuthenticationService {
                 .orElseThrow(() -> new IllegalArgumentException("Invalid email or password"));
         authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(request.getEmail(), request.getPassword()));
-        String jwtToken = jwtService.generateToken(user);
-        return new JwtAuthenticationResponse(jwtToken);
+        String jwt = jwtService.generateToken(user);
+        return new JwtAuthenticationResponse(jwt);
+    }
+
+    @Override
+    public boolean isTokenValid(String jwt) {
+        String email = jwtService.extractUserName(jwt);
+        if (userRepository.existsByEmail(email)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 }
