@@ -1,6 +1,8 @@
 # Links Shortener API
 
 Welcome to the Links Shortener API documentation! This API service provides the functionality to shorten URLs and retrieve the original URL from the shortened one.
+To test the API, you can send HTTP requests using the domain 'lnklm.ru'.
+
 
 ## Overview
 
