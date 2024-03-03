@@ -3,6 +3,7 @@ package ru.wwerlosh.services;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 import ru.wwerlosh.configs.HttpClient;
@@ -34,20 +35,29 @@ public class ApiService {
         this.redisRepository = redisRepository;
     }
 
-    public Response shortenLink(UrlRequest urlRequest) {
+    public ResponseEntity<Response> shortenLink(UrlRequest urlRequest) {
         String longUrl = urlRequest.getLongUrl();
 
         if (!checkConnection(longUrl)) {
-            return new ErrorResponse("Failed to establish connection to the URL");
+            return new ResponseEntity<>(
+                    new ErrorResponse("Failed to establish connection to the URL"),
+                    HttpStatus.BAD_REQUEST
+            );
         }
 
         UrlMapping databaseUrl = getUrlMappingFromDatabase(longUrl);
         if (databaseUrl != null) {
-            return new UrlMappingResponse(databaseUrl);
+            return new ResponseEntity<>(
+                    new UrlMappingResponse(databaseUrl),
+                    HttpStatus.OK
+            );
         }
 
         String shortUrl = generateAndSaveShortLink(urlRequest);
-        return new UrlMappingResponse(longUrl, shortUrl);
+        return new ResponseEntity<>(
+                new UrlMappingResponse(longUrl, shortUrl),
+                HttpStatus.OK
+        );
     }
 
     public String redirect(String token) {

@@ -33,7 +33,7 @@ public class ResponseDeserializer extends StdDeserializer<Response> {
 
         final JsonNode errorField = request.get("error");
         final JsonNode shortUrlField = request.get("shortUrl");
-
+        System.out.println(request);
         if (errorField != null) {
             return mapper.treeToValue(request, ErrorResponse.class);
         }

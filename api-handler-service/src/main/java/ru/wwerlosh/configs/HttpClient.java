@@ -15,6 +15,7 @@ import org.springframework.context.annotation.Configuration;
 import ru.wwerlosh.controllers.dto.UrlRequest;
 
 import java.io.IOException;
+import ru.wwerlosh.exceptions.ConnectionRefusedError;
 
 @Configuration
 public class HttpClient {
@@ -26,9 +27,9 @@ public class HttpClient {
     @Value("${shortlink.service.url}")
     private String shortlinkServiceUrl;
 
-    public boolean tryConnect(String url) throws IOException {
+    public boolean checkHttpOk(String url) throws IOException {
+        logger.info(url);
         HttpHead request = new HttpHead(url);
-
         try (CloseableHttpResponse response = httpClient.execute(request)) {
             int statusCode = response.getStatusLine().getStatusCode();
 
@@ -44,8 +45,9 @@ public class HttpClient {
             }
         } catch (IOException e) {
             logger.error("Error connecting to '{}': {}", url, e.getMessage());
-            throw new RuntimeException(e);
+            throw new ConnectionRefusedError(e);
         }
+
     }
 
     public String generateShortLink(UrlRequest urlRequest) throws IOException {

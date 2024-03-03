@@ -1,3 +1,19 @@
 spring:
   application:
     name: shortlink-service
+  datasource:
+    url: jdbc:postgresql://postgres:5432/shortened_urls
+    username: postgres
+    password: 1
+  jpa:
+    hibernate:
+      ddl-auto: update
+    show-sql: true
+  data:
+    bloom-filter:
+      size: 100000
+      num-hash-functions: 4
+      bitset-json-path: "data\\bit_set.json"
+
+server:
+  port: 8081

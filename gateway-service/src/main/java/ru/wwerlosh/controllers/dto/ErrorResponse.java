@@ -11,6 +11,9 @@ public class ErrorResponse extends Response {
         this.error = error;
     }
 
+    public ErrorResponse() {
+    }
+
     public String getError() {
         return error;
     }

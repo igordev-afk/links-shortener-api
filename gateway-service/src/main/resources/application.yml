@@ -1,3 +1,12 @@
 spring:
   application:
-    name: api-gateway
+    name: gateway-service
+  data:
+    auth-service: "http://auth-service:8083"
+    api-handler-service: "http://api-handler-service:8082"
+    jwt:
+      secret: "8w9U7eupsVcokibCDUjO59xuTkl9XJvtMJnx0O7ysqmlmYROYHm88YASpGOsPKFP"
+
+server:
+  uri: "http://80.242.58.171:8080/"
+  address: 0.0.0.0

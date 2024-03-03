@@ -15,12 +15,8 @@ public class RedisRepository {
 
     private static final String HASH_KEY = "URL";
     private final HashOperations<String, String, String> hashOperations;
-    private final UrlMappingSerializer objectMapper;
-
-    public RedisRepository(RedisTemplate<String, String> redisTemplate,
-                               UrlMappingSerializer objectMapper) {
+    public RedisRepository(RedisTemplate<String, String> redisTemplate) {
         this.hashOperations = redisTemplate.opsForHash();
-        this.objectMapper = objectMapper;
     }
 
     public String findLongUrlByToken(String token) {

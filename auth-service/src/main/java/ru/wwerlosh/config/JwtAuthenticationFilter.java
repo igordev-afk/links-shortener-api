@@ -16,7 +16,6 @@ import org.springframework.security.web.authentication.WebAuthenticationDetailsS
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 import ru.wwerlosh.services.JwtService;
-import ru.wwerlosh.services.JwtServiceImpl;
 
 @Component
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
@@ -26,7 +25,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
     private final UserDetailsService userDetailsService;
 
-    public JwtAuthenticationFilter(JwtServiceImpl jwtService,
+    public JwtAuthenticationFilter(JwtService jwtService,
                                    UserDetailsService userDetailsService) {
         this.jwtService = jwtService;
         this.userDetailsService = userDetailsService;

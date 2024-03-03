@@ -1,7 +1,11 @@
 package ru.wwerlosh.controllers;
 
+import jakarta.servlet.http.Cookie;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -25,19 +29,26 @@ public class GatewayController {
     }
 
     @PostMapping("/signup")
-    public ResponseEntity<JwtAuthenticationDTO> signUp(@RequestBody SignUpRequest request) {
-        return ResponseEntity.ok(gatewayService.signUp(request));
+    public ResponseEntity<?> signUp(@RequestBody SignUpRequest request, HttpServletResponse response) {
+        JwtAuthenticationDTO authDto = gatewayService.signUp(request);
+        Cookie cookie = new Cookie("token", authDto.getToken());//создаем объект Cookie,
+        //в конструкторе указываем значения для name и value
+        cookie.setPath("/");//устанавливаем путь
+        cookie.setMaxAge(86400);//здесь устанавливается время жизни куки
+        response.addCookie(cookie);//добавляем Cookie в запрос
+        response.setContentType("text/plain");//устанавливаем контекст
+        return ResponseEntity.ok().body(HttpStatus.OK);
     }
 
     @PostMapping("/signin")
-    public ResponseEntity<JwtAuthenticationDTO> signIn(@RequestBody SignInRequest request) {
-        return ResponseEntity.ok(gatewayService.signIn(request));
+    public JwtAuthenticationDTO signIn(@RequestBody SignInRequest request) {
+        return gatewayService.signIn(request);
     }
 
     @PostMapping("/shorten_url")
-    public ResponseEntity<Response> shortenUrl(HttpServletRequest servletRequest,
+    public Response shortenUrl(@CookieValue(value = "token") String token,
                                                @RequestBody UrlRequest request) {
-        return ResponseEntity.ok(gatewayService.shortenUrl(servletRequest, request));
+        return gatewayService.shortenUrl(token, request);
     }
 
     @GetMapping("/{token}")

@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.web.servlet.view.RedirectView;
 import ru.wwerlosh.configs.HttpClient;
+import ru.wwerlosh.configs.ResponseDeserializer;
 import ru.wwerlosh.controllers.dto.AuthorizationErrorResponse;
 import ru.wwerlosh.controllers.dto.Response;
 import ru.wwerlosh.controllers.dto.UrlRequest;
@@ -13,6 +14,8 @@ import ru.wwerlosh.controllers.dto.UrlResponse;
 import ru.wwerlosh.dao.request.SignInRequest;
 import ru.wwerlosh.dao.request.SignUpRequest;
 import ru.wwerlosh.dao.response.JwtAuthenticationDTO;
+import ru.wwerlosh.exceptions.AuthorizationException;
+import ru.wwerlosh.exceptions.InvalidTokenException;
 import ru.wwerlosh.utils.JwtUtils;
 
 @Service
@@ -37,27 +40,18 @@ public class GatewayService {
         return httpClient.signInClient(request);
     }
 
-    public Response shortenUrl(HttpServletRequest servletRequest, UrlRequest request) {
+    public Response shortenUrl(String jwt, UrlRequest request) {
 
-        final String authHeader = servletRequest.getHeader("Authorization");
-        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
-            return new AuthorizationErrorResponse(
-                    "You don't have access",
-                    HttpStatus.SC_FORBIDDEN
-            );
-        }
-
-        final String jwt = authHeader.substring(7);
         if (!httpClient.validateTokenClient(jwt)) {
-            return new AuthorizationErrorResponse(
-                    "Token is invalid or has been expired",
-                    HttpStatus.SC_UNAUTHORIZED
-            );
+            throw new InvalidTokenException("Token is invalid or has been expired", jwt);
         }
 
-        UrlResponse response = (UrlResponse) httpClient.shortenUrlClient(request);
-        String shortUrl = HOST + response.getShortUrl();
-        response.setShortUrl(shortUrl);
+        Response response = httpClient.shortenUrlClient(request);
+        if (response.getClass() == UrlResponse.class) {
+            String shortUrl = HOST + ((UrlResponse) response).getShortUrl();
+            ((UrlResponse) response).setShortUrl(shortUrl);
+        }
+
         return response;
     }
 

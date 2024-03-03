@@ -14,11 +14,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
+import ru.wwerlosh.controllers.dto.ErrorResponse;
 import ru.wwerlosh.controllers.dto.Response;
 import ru.wwerlosh.controllers.dto.UrlRequest;
+import ru.wwerlosh.controllers.dto.UrlResponse;
 import ru.wwerlosh.dao.request.SignInRequest;
 import ru.wwerlosh.dao.request.SignUpRequest;
 import ru.wwerlosh.dao.response.JwtAuthenticationDTO;
+import ru.wwerlosh.exceptions.AuthorizationException;
 import ru.wwerlosh.utils.DtoMapper;
 
 @Configuration
@@ -58,7 +61,7 @@ public class HttpClient {
                     EntityUtils.toString(response.getEntity())
             );
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new AuthorizationException("Bad request");
         }
     }
 
@@ -82,7 +85,7 @@ public class HttpClient {
                     EntityUtils.toString(response.getEntity())
             );
         } catch (IOException e) {
-            throw new RuntimeException(e);
+            throw new AuthorizationException("Incorrect email or password");
         }
     }
 
@@ -120,13 +123,16 @@ public class HttpClient {
         request.setEntity(entity);
 
         try (CloseableHttpResponse response = httpClient.execute(request)) {
+            int statusCode = response.getStatusLine().getStatusCode();
             logger.info("HTTP Status Code: {}", response.getStatusLine().getStatusCode());
             return mapper.convertToResponse(
                     EntityUtils.toString(response.getEntity())
             );
+
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
+
     }
 
     public String redirectClient(String token) {

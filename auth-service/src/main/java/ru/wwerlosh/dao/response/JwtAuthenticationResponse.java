@@ -1,7 +1,5 @@
 package ru.wwerlosh.dao.response;
 
-import java.io.Serializable;
-
 public class JwtAuthenticationResponse {
     private String token;
 
