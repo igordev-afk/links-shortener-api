@@ -39,7 +39,7 @@ Send a POST request to /shorten_url with the following JSON payload and request 
 
 ```json
 {
-  "longUrl": "https://example.com/your/long/url"
+  "long_url": "https://example.com/your/long/url"
 }
 ```
 
