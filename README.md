@@ -37,6 +37,7 @@ To register and obtain your authentication token, send a POST request to `/signu
 ### Shortening URL
 Send a POST request to /shorten_url with the following JSON payload and request header with valid Bearer token:
 
+(if you have token in cookies, it isn't neccesary to set it in header)
 ```json
 {
   "long_url": "https://example.com/your/long/url"
