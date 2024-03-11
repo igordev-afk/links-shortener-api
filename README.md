@@ -27,8 +27,6 @@ To register and obtain your authentication token, send a POST request to `/signu
 
 ```json
 {
-  "firstName": "YourFirstName",
-  "lastName": "YourLastName",
   "email": "your.email@example.com",
   "password": "YourSecurePassword"
 }
