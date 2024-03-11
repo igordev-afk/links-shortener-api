@@ -25,6 +25,8 @@ The Links Shortener API offers a simple yet effective solution for shortening UR
 ### Signing Up
 To register and obtain your authentication token, send a POST request to `/signup` with the following JSON payload:
 
+(token will be authomatically setted into cookies) 
+
 ```json
 {
   "email": "your.email@example.com",
